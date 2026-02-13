@@ -25,9 +25,20 @@ func NewHandler(db *sql.DB) *Handler {
 }
 
 func (h *Handler) Health(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"status": "healthy",
+	status := "healthy"
+	httpStatus := http.StatusOK
+	dbStatus := "connected"
+
+	if err := h.db.Ping(); err != nil {
+		status = "unhealthy"
+		httpStatus = http.StatusServiceUnavailable
+		dbStatus = "disconnected"
+	}
+
+	c.JSON(httpStatus, gin.H{
+		"status":  status,
 		"service": "dataweaver",
+		"db":      dbStatus,
 	})
 }
 
