@@ -1,0 +1,8 @@
+.git
+.github
+*.md
+LICENSE
+.env
+.env.*
+tmp/
+coverage.out
